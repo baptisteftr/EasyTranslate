@@ -47,5 +47,3 @@ extension UIScreen{
    static let screenHeight = UIScreen.main.bounds.size.height
    static let screenSize = UIScreen.main.bounds.size
 }
-
-// API_KEY: AIzaSyATC1pYypUhpVv62hv1869eD4Kb2721cmI
