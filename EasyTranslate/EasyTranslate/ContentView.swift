@@ -27,10 +27,10 @@ struct ContentView: View {
                     Text("Validate")
                 }
             }
-            .ignoresSafeArea()
+//            .ignoresSafeArea()
             .onAppear {
                 if (UserDefaults.standard.string(forKey: "APIkey") == nil) {
-                    showSheet.toggle()
+//                    showSheet.toggle()
                 }
             }
     }

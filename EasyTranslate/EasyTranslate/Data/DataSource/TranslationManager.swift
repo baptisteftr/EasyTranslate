@@ -8,12 +8,11 @@
 import Foundation
 
 class TranslationManager: ObservableObject {
-
     let url = URL(string: "https://translation.googleapis.com/language/translate/v2?key=\(UserDefaults.standard.string(forKey: "APIkey") ?? "")")
     @Published var languageList = ["fr", "en", "es", "it"]
     @Published var translatedContent = ["Waiting for translation", "Waiting for translation", "Waiting for translation", "Waiting for translation"]
     
-    func translateRequest(input: String, arch: [String], lang: Int) {
+    func translateRequest(input: String, arch: [String], lang: Int, type: String) {
         let body: [String: String] = [
             "q": input,
             "target": languageList[lang]
@@ -29,78 +28,51 @@ class TranslationManager: ObservableObject {
         URLSession.shared.dataTask(with: request) { [self] (data, response, error ) in
             if data != nil {
                 let reponse = try! JSONDecoder().decode(Translate.self, from: data!)
-//                translatedContent[lang] = reponse.data.translations[0].translatedText
-                var tabbedTrad = reponse.data.translations[0].translatedText.components(separatedBy: ".")
-                print("len arch: \(arch.count) | trad: \(tabbedTrad.count)")
-                mergeIOSTrad(arch: arch, trad: tabbedTrad, lang: lang)
+                let tabbedTrad = reponse.data.translations[0].translatedText.components(separatedBy: ".")
+                mergeTrad(arch: arch, trad: tabbedTrad, lang: lang, type: type)
             }
         }.resume()
     }
     
-    func mergeIOSTrad(arch: [String], trad: [String], lang: Int) {
+    func mergeTrad(arch: [String], trad: [String], lang: Int, type: String) {
         var finalString = ""
         
         for indice in arch.indices {
-            finalString = finalString + "\(UnicodeScalar(34) ?? "£")\(arch[indice])\(UnicodeScalar(34) ?? "£") = \(UnicodeScalar(34) ?? "£")\(trad[indice+1])\(UnicodeScalar(34) ?? "£")\n"
+            finalString = type == "IOS" ? finalString + "\(UnicodeScalar(34) ?? "£")\(arch[indice])\(UnicodeScalar(34) ?? "£") = \(UnicodeScalar(34) ?? "£")\(trad[indice+1])\(UnicodeScalar(34) ?? "£")\n" : "<string name=\(UnicodeScalar(34) ?? "£")\(arch[indice])\(UnicodeScalar(34) ?? "£")>\(trad[indice+1])<\(UnicodeScalar(92) ?? "£")string>"
         }
         print(finalString)
         translatedContent[lang] = finalString
     }
     
-    func parseIOSArchitecture(toParse: String) -> [String] {
-        let separators = CharacterSet(charactersIn: "=;\(UnicodeScalar(34) ?? "£")")
-        let items = toParse.components(separatedBy: separators)
-        var newTab = [String]()
-        var i = 1
-        for indice in items.indices {
-            if i <= indice {
-                newTab.append(items[i])
-                i = i + 6
-            }
-        }
-//        print(newTab)
-        return newTab
-    }
-    
-    func parseString(toParse: String) {
-        let separators = CharacterSet(charactersIn: "=;\(UnicodeScalar(34) ?? "£")")
+    func parseString(toParse: String, type: String) {
+        let separators = type == "IOS" ? CharacterSet(charactersIn: "=;\(UnicodeScalar(34) ?? "£")") : CharacterSet(charactersIn: "=<>\(UnicodeScalar(34) ?? "£")")
         let items = toParse.components(separatedBy: separators)
         var newString = ""
-        var i = 4
+        var newTab = [String]()
+        var i = type == "IOS" ? 4 : 5
+        var j = type == "IOS" ? 1 : 3
         
         for indice in items.indices {
             if i <= indice {
                 newString = newString + "."
                 newString = newString + items[indice]
-                i = i + 6
+                i = i + (type == "IOS" ? 6 : 7)
+            }
+            if j <= indice {
+                newTab.append(items[j])
+                j = j + (type == "IOS" ? 6 : 7)
             }
         }
-        var arch = parseIOSArchitecture(toParse: toParse)
-        for j in languageList.indices {
-            translateRequest(input: newString, arch: arch, lang: j)
+        for languageId in languageList.indices {
+//            translateRequest(input: newString, arch: newTab, lang: languageId, type: type)
+//            print("items: \(items)")
+            print("tab: \(newTab)")
+//            print("string: \(newString)")
         }
-//        print(translationManager.translatedContent.split(separator: "."))
-        
-//        var finalString = ""
-//        let finalSeparators = CharacterSet(charactersIn: ".")
-//        let finalItems = translationManager.translatedContent[0].components(separatedBy: finalSeparators)
-//
-//        for indice in finalItems.indices {
-//
-//        }
-//        print(newString)
     }
 }
 
-//struct Networking {
-//    var urlSession = URLSession.shared
-//
-//    func postTranslation(input: String, lang: String) -> String {
-//        let url = URL(string: "https://translation.googleapis.com/language/translate/v2?key=\(UserDefaults.standard.string(forKey: "APIkey") ?? "")")
-//        let body: [String: String] = [
-//            "q": input,
-//            "target": lang
-//        ]
-//        let finalData = try! JSONSerialization.data(withJSONObject: body)
-//    }
-//}
+//<string name="login_submit_button">Sign in</string>
+//<string name="login_submit_button">Hello there</string>
+//<string name="login_submit_button">Hi Jeannine</string>
+//<string name="login_submit_button">You bastard</string>

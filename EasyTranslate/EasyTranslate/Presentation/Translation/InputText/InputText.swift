@@ -10,8 +10,26 @@ import SwiftUI
 struct InputText: View {
     @State var inputString: String = ""
     @ObservedObject var translationManager = TranslationManager()
+    @State var sent = false
     
     var body: some View {
+//        HStack {
+//            VStack {
+//                HStack {
+//                    ForEach(languages) { language in
+//                        LanguageCapsule(language: language.language)
+//                    }
+//                }
+//                .frame(maxWidth: .infinity, alignment: .leading)
+//                TextField("Put your text here", text: $inputString, axis: .vertical)
+//                    .lineLimit(30, reservesSpace: true)
+//                    .textFieldStyle(.roundedBorder)
+//            }
+//            .padding()
+//        }
+//        .frame(maxWidth: sent ? UIScreen.screenWidth/4 : (UIScreen.screenWidth/4) * 3, maxHeight: .infinity, alignment: .topLeading)
+//        Divider()
+//        Spacer()
         HStack {
             VStack {
                 Text("To translate")
@@ -21,28 +39,31 @@ struct InputText: View {
                     .padding()
                 Button {
 //                    translationManager.parseIOSArchitecture(toParse: inputString)
-                    translationManager.parseString(toParse: inputString)
+                    translationManager.parseString(toParse: inputString, type: "ANDROID")
                 } label: {
                     Text("parse")
                 }
             }
-            .frame(maxWidth: UIScreen.screenWidth/2, maxHeight: .infinity, alignment: .topLeading)
-            .background(Color(.systemGray6))
+            .frame(maxWidth: (UIScreen.screenWidth/4)*3, maxHeight: .infinity, alignment: .topLeading)
+            Divider()
             VStack {
                 ForEach(translationManager.languageList.indices, id: \.self) { index in
                     Text(translationManager.languageList[index])
                     Text(translationManager.translatedContent[index])
                 }
+                .padding()
             }
-            .frame(maxWidth: UIScreen.screenWidth/2, maxHeight: .infinity, alignment: .topLeading)
+            .frame(maxWidth: UIScreen.screenWidth/4, maxHeight: .infinity, alignment: .topLeading)
         }
+        .background(Color(.systemGray6))
     }
     
-//    func replaceData(architecture: [String], translation: String) -> String {
-//        var finalString = ""
-//        let separators = CharacterSet(charactersIn: ".")
-//        let items = inputString.components(separatedBy: separators)
-//    }
+    @ViewBuilder
+    func outputSide() -> some View {
+        VStack {
+            
+        }
+    }
 }
 
 struct InputText_Previews: PreviewProvider {
