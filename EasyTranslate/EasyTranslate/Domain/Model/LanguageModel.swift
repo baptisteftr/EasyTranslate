@@ -37,10 +37,16 @@ struct Language: Codable, Identifiable {
 var languages: [Language] = [
     Language(language: "French 🇫🇷", lang: "fr", selected: false),
     Language(language: "English 🇺🇸", lang: "en", selected: false),
-    Language(language: "Spanish 🇪🇸", lang: "sp", selected: false),
-    Language(language: "German 🇩🇪", lang: "ge", selected: false),
+    Language(language: "Spanish 🇪🇸", lang: "es", selected: false),
+    Language(language: "German 🇩🇪", lang: "de", selected: false),
     Language(language: "Italian 🇮🇹", lang: "it", selected: false),
     Language(language: "Chinese 🇨🇳", lang: "zh", selected: false),
     Language(language: "Japanese 🇯🇵", lang: "ja", selected: false),
     Language(language: "Russian 🇷🇺", lang: "ru", selected: false)
 ]
+
+struct TranslatedStruct: Codable, Identifiable {
+    var id = UUID()
+    var lang: String
+    var translation: String
+}

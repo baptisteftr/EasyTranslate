@@ -31,7 +31,7 @@ struct ContentView: View {
 //            .ignoresSafeArea()
             .onAppear {
                 if (UserDefaults.standard.string(forKey: "APIkey") == nil) {
-//                    showSheet.toggle()
+                    showSheet.toggle()
                 }
             }
     }

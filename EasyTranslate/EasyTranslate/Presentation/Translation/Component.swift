@@ -41,7 +41,7 @@ struct LanguageCapsule: View {
                     Capsule()
                         .stroke()
                         .foregroundStyle(selected ? .primary : .primary)
-                        .background(selected ? Color.teal : Color.white)
+                        .background(selected ? Color.teal : Color(.systemBackground))
                 )
                 .clipShape(Capsule())
         }
