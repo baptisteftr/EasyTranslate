@@ -27,7 +27,6 @@ struct Translation: Codable {
     let translatedText, detectedSourceLanguage: String
 }
 
-
 struct Language: Codable, Identifiable {
     var id = UUID()
     var language: String
@@ -37,8 +36,11 @@ struct Language: Codable, Identifiable {
 
 var languages: [Language] = [
     Language(language: "French 🇫🇷", lang: "fr", selected: false),
-    Language(language: "English 🇺🇸", lang: "fr", selected: false),
-    Language(language: "Spanish 🇪🇸", lang: "fr", selected: false),
-    Language(language: "Deutch 🇩🇪", lang: "fr", selected: false),
-    Language(language: "Italian 🇮🇹", lang: "fr", selected: false),
+    Language(language: "English 🇺🇸", lang: "en", selected: false),
+    Language(language: "Spanish 🇪🇸", lang: "sp", selected: false),
+    Language(language: "German 🇩🇪", lang: "ge", selected: false),
+    Language(language: "Italian 🇮🇹", lang: "it", selected: false),
+    Language(language: "Chinese 🇨🇳", lang: "zh", selected: false),
+    Language(language: "Japanese 🇯🇵", lang: "ja", selected: false),
+    Language(language: "Russian 🇷🇺", lang: "ru", selected: false)
 ]

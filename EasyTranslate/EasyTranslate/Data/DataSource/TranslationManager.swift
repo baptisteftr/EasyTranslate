@@ -10,7 +10,8 @@ import Foundation
 class TranslationManager: ObservableObject {
     let url = URL(string: "https://translation.googleapis.com/language/translate/v2?key=\(UserDefaults.standard.string(forKey: "APIkey") ?? "")")
     @Published var languageList = ["fr", "en", "es", "it"]
-    @Published var translatedContent = ["Waiting for translation", "Waiting for translation", "Waiting for translation", "Waiting for translation"]
+    @Published var translatedContent = [String]()
+    @Published var translated: Bool = false
     
     func translateRequest(input: String, arch: [String], lang: Int, type: String) {
         let body: [String: String] = [
@@ -40,8 +41,10 @@ class TranslationManager: ObservableObject {
         for indice in arch.indices {
             finalString = type == "IOS" ? finalString + "\(UnicodeScalar(34) ?? "£")\(arch[indice])\(UnicodeScalar(34) ?? "£") = \(UnicodeScalar(34) ?? "£")\(trad[indice+1])\(UnicodeScalar(34) ?? "£")\n" : "<string name=\(UnicodeScalar(34) ?? "£")\(arch[indice])\(UnicodeScalar(34) ?? "£")>\(trad[indice+1])<\(UnicodeScalar(92) ?? "£")string>"
         }
-        print(finalString)
-        translatedContent[lang] = finalString
+        translatedContent.append(finalString)
+//        translatedContent[lang] = finalString
+        translated = true
+        print(translated)
     }
     
     func parseString(toParse: String, type: String) {
@@ -64,15 +67,10 @@ class TranslationManager: ObservableObject {
             }
         }
         for languageId in languageList.indices {
-//            translateRequest(input: newString, arch: newTab, lang: languageId, type: type)
+            translateRequest(input: newString, arch: newTab, lang: languageId, type: type)
 //            print("items: \(items)")
             print("tab: \(newTab)")
 //            print("string: \(newString)")
         }
     }
 }
-
-//<string name="login_submit_button">Sign in</string>
-//<string name="login_submit_button">Hello there</string>
-//<string name="login_submit_button">Hi Jeannine</string>
-//<string name="login_submit_button">You bastard</string>

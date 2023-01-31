@@ -23,7 +23,7 @@ struct targetLanguCapsule: View {
 
 struct LanguageCapsule: View {
     @State var language: String
-    @State var selected = false
+    @Binding var selected: Bool
     
     var body: some View {
         Button {
@@ -33,23 +33,18 @@ struct LanguageCapsule: View {
         } label: {
             VStack {
                 Text(language)
+                    .scaledToFill()
                     .foregroundColor(.primary)
             }.padding(.vertical, 10)
                 .padding(.horizontal)
                 .background(
                     Capsule()
                         .stroke()
-                        .foregroundStyle(selected ? .primary : .secondary)
-                        .background(selected ? .accentColor : Color.white)
+                        .foregroundStyle(selected ? .primary : .primary)
+                        .background(selected ? Color.teal : Color.white)
                 )
                 .clipShape(Capsule())
         }
-    }
-}
-
-struct LanguageCapsule_Previews: PreviewProvider {
-    static var previews: some View {
-        LanguageCapsule(language: "French 🇫🇷")
     }
 }
 
@@ -62,9 +57,3 @@ extension Color {
         )
     }
 }
-
-//struct Component_Previews: PreviewProvider {
-//    static var previews: some View {
-//        targetLanguCapsule(language: "fr", selected: )
-//    }
-//}
